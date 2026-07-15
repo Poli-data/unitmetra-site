@@ -67,6 +67,19 @@
     'fmt.module':['Модуль','Module'],
     'fmt.docs':['Документация','Documentation'],
 
+    'finder.eyebrow':['Подбор решения','Solution finder'],
+    'finder.title':['Подберём первый шаг за 30 секунд','Choose the first step in 30 seconds'],
+    'finder.text':['Выберите тип бизнеса, задачу и состояние данных. Получите понятную рекомендацию по формату, сроку и составу результата.','Choose your business type, task and data readiness. Get a clear recommendation on format, timing and deliverables.'],
+    'finder.trust1':['Без обязательств','No obligation'],'finder.trust2':['Ответ в течение рабочего дня','Reply within one business day'],'finder.trust3':['Цена фиксируется до старта','Price fixed before start'],
+    'finder.q1':['Для кого задача?','Who is the task for?'],'finder.q2':['Главная задача','Main task'],'finder.q3':['Данные уже есть?','Is data available?'],
+    'finder.a.market':['Маркетплейс','Marketplace'],'finder.a.small':['Малый бизнес','Small business'],'finder.a.agency':['Агентство','Agency'],
+    'finder.t.profit':['Прибыль и расходы','Profit and costs'],'finder.t.ads':['Маркетинг и реклама','Marketing and advertising'],'finder.t.forecast':['Прогноз спроса','Demand forecast'],'finder.t.clients':['Клиенты и сегментация','Customers and segmentation'],'finder.t.automation':['Дашборд и автоматизация','Dashboard and automation'],'finder.t.ml':['ML-модель / программирование','ML model / programming'],
+    'finder.d.ready':['Да, есть выгрузки','Yes, exports are ready'],'finder.d.partial':['Часть данных есть','Some data is available'],'finder.d.none':['Пока не знаю','Not sure yet'],
+    'finder.refresh':['Обновить рекомендацию','Update recommendation'],'finder.recommend':['Рекомендуемый старт','Recommended start'],
+    'finder.meta.price':['Стоимость','Price'],'finder.meta.term':['Срок','Timeline'],'finder.meta.format':['Результат','Deliverable'],
+    'finder.include1':['Расчёты по вашим данным','Calculations on your data'],'finder.include2':['Понятные выводы','Clear findings'],'finder.include3':['План первых действий','First action plan'],
+    'finder.cta':['Получить точную оценку','Get an exact estimate'],'finder.note':['Точная стоимость определяется после бесплатной диагностики и проверки структуры данных.','The exact price is determined after a free diagnostic and data structure review.'],
+
     'deliver.eyebrow':['Результат проекта','Project result'],
     'deliver.title':['Материалы, с которыми можно работать сразу','Materials ready to use immediately'],
     'deliver.subtitle':['Состав зависит от пакета и задачи. Все расчёты связаны между собой, а выводы переведены на понятный бизнес-язык.','The content depends on the package and task. All calculations are connected, and findings are translated into clear business language.'],
@@ -168,6 +181,7 @@
   function setLang(next){
     if(lang==='en'&&next==='ru')applyFullTranslation(false);
     lang=next;storage.set(KEY,lang);html.lang=lang;
+    document.querySelectorAll('[data-service-finder]').forEach(block=>block._updateFinder?.());
     document.querySelectorAll('[data-i18n]').forEach(el=>{const t=translations[el.dataset.i18n];if(t)el.innerHTML=t[lang==='ru'?0:1]});
     document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
     document.querySelectorAll('[data-title-ru]').forEach(el=>{document.title=lang==='ru'?el.dataset.titleRu:el.dataset.titleEn});
@@ -216,40 +230,49 @@
     }));
   });
 
-  // Quick service finder
+
+  // Premium service finder
   document.querySelectorAll('[data-service-finder]').forEach(block=>{
     const button=block.querySelector('[data-finder-submit]');
-    const result=block.querySelector('[data-finder-result]');
-    button?.addEventListener('click',()=>{
-      const audience=block.querySelector('[data-finder-audience]').value;
-      const task=block.querySelector('[data-finder-task]').value;
-      const data=block.querySelector('[data-finder-data]').value;
-      let title='Бесплатная диагностика';
-      let text='Сначала уточним задачу и проверим, какие данные доступны.';
+    const audienceEl=block.querySelector('[data-finder-audience]');
+    const taskEl=block.querySelector('[data-finder-task]');
+    const dataEl=block.querySelector('[data-finder-data]');
+    const titleEl=block.querySelector('[data-finder-title]');
+    const descEl=block.querySelector('[data-finder-description]');
+    const priceEl=block.querySelector('[data-finder-price]');
+    const termEl=block.querySelector('[data-finder-term]');
+    const formatEl=block.querySelector('[data-finder-format]');
+
+    function recommendation(){
+      const audience=audienceEl.value,task=taskEl.value,data=dataEl.value;
+      const isRu=lang==='ru';
+      let rec={
+        title:isRu?'Бесплатная диагностика':'Free diagnostic',
+        desc:isRu?'Сначала уточним задачу и проверим, какие данные доступны.':'First we clarify the task and review what data is available.',
+        price:isRu?'Бесплатно':'Free',term:isRu?'20–30 минут':'20–30 minutes',format:isRu?'План проекта':'Project plan'
+      };
       if(task==='ml'){
-        title='ML-прототип от 69 900 ₽';
-        text='Проверим качество данных, сравним базовый подход и ML-модель, покажем метрики и ограничения.';
+        rec={title:isRu?'ML-прототип':'ML prototype',desc:isRu?'Проверим данные, сравним базовый подход и ML-модель, покажем метрики, ограничения и бизнес-пользу.':'We review the data, compare a baseline and ML model, and explain metrics, limits and business value.',price:isRu?'от 69 900 ₽':'from 69,900 ₽',term:isRu?'от 10 дней':'from 10 days',format:isRu?'Notebook + отчёт':'Notebook + report'};
       }else if(task==='clients'){
-        title='Аналитика клиентов от 34 900 ₽';
-        text='Подойдёт сегментация, анализ повторных покупок или оценка оттока — формат зависит от данных.';
+        rec={title:isRu?'Аналитика клиентов':'Customer analytics',desc:isRu?'Сегментация, повторные покупки, вероятность покупки или оттока — в зависимости от вашей задачи.':'Segmentation, repeat purchases, purchase probability or churn, depending on the task.',price:isRu?'от 34 900 ₽':'from 34,900 ₽',term:isRu?'от 7 дней':'from 7 days',format:isRu?'Сегменты + отчёт':'Segments + report'};
       }else if(task==='automation'){
-        title='Аналитика под ключ от 89 900 ₽';
-        text='Подойдёт дашборд с автоматическим обновлением данных. Сопровождение — от 39 900 ₽ в месяц.';
+        rec={title:isRu?'Аналитика под ключ':'Analytics turnkey',desc:isRu?'Единый дашборд с автоматическим обновлением данных и регулярными рекомендациями.':'A unified dashboard with automated data updates and recurring recommendations.',price:isRu?'от 89 900 ₽':'from 89,900 ₽',term:isRu?'от 15 дней':'from 15 days',format:isRu?'Дашборд + API':'Dashboard + API'};
       }else if(task==='forecast'){
-        title='Комплексная аналитика от 59 900 ₽';
-        text='Нужен анализ истории, сезонности и факторов спроса с планом поставок или продаж.';
+        rec={title:isRu?'Комплексная аналитика':'Comprehensive analytics',desc:isRu?'Анализ истории и сезонности с прогнозом продаж, спроса или поставок.':'Historical and seasonal analysis with sales, demand or supply forecasting.',price:isRu?'от 59 900 ₽':'from 59,900 ₽',term:isRu?'от 10 дней':'from 10 days',format:isRu?'HTML + прогноз':'HTML + forecast'};
       }else if(audience==='market'&&(task==='profit'||task==='ads')&&data==='ready'){
-        title='Экспресс-аудит от 29 900 ₽';
-        text='Самый быстрый старт: прибыль по SKU, расходы, реклама и список приоритетных действий.';
+        rec={title:isRu?'Экспресс-аудит':'Express audit',desc:isRu?'Самый быстрый способ понять прибыль по SKU, расходы, рекламу и главные точки потерь.':'The fastest way to understand SKU profit, costs, advertising and key loss areas.',price:isRu?'от 29 900 ₽':'from 29,900 ₽',term:isRu?'5–7 дней':'5–7 days',format:isRu?'Excel + PDF':'Excel + PDF'};
       }else if(audience==='small'){
-        title='Аналитика для малого бизнеса от 34 900 ₽';
-        text='Начнём с одной бизнес-задачи и подготовим отчёт или дашборд без найма аналитика в штат.';
+        rec={title:isRu?'Аналитика малого бизнеса':'Small-business analytics',desc:isRu?'Начнём с одной бизнес-задачи и подготовим отчёт или дашборд без найма аналитика в штат.':'We start with one business task and deliver a report or dashboard without an in-house hire.',price:isRu?'от 34 900 ₽':'from 34,900 ₽',term:isRu?'от 7 дней':'from 7 days',format:isRu?'Отчёт / дашборд':'Report / dashboard'};
+      }else if(audience==='agency'){
+        rec={title:isRu?'Аналитик на подряд':'Analytics subcontracting',desc:isRu?'Подключим специалиста под проект агентства: анализ, SQL, ML, отчётность или автоматизация.':'We provide a specialist for the agency project: analytics, SQL, ML, reporting or automation.',price:isRu?'по запросу':'on request',term:isRu?'по ТЗ':'per brief',format:isRu?'White-label результат':'White-label delivery'};
       }
-      result.querySelector('strong').textContent=title;
-      result.querySelector('p').textContent=text;
-      result.classList.add('show');
-      trackGoal('service_finder_result');
-    });
+      titleEl.textContent=rec.title;descEl.textContent=rec.desc;priceEl.textContent=rec.price;termEl.textContent=rec.term;formatEl.textContent=rec.format;
+    }
+
+    button?.addEventListener('click',()=>{recommendation();trackGoal('service_finder_result')});
+    [audienceEl,taskEl,dataEl].forEach(el=>el?.addEventListener('change',recommendation));
+    block._updateFinder=recommendation;
+    recommendation();
   });
 
   // Modal and multi-step form
