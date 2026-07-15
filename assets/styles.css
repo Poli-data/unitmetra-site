@@ -283,3 +283,90 @@ section:has(.review-card){display:none}
 @media(max-width:1050px){.finder-premium{grid-template-columns:1fr 1fr}.finder-intro{grid-column:1/-1}.finder-intro h2{font-size:31px}}
 @media(max-width:720px){.finder-premium{grid-template-columns:1fr;padding:20px}.finder-intro{grid-column:auto}.finder-intro h2{font-size:29px}.finder-recommendation-meta{grid-template-columns:1fr 1fr}.finder-recommendation-meta div:last-child{grid-column:1/-1}}
 @media(max-width:440px){.finder-premium{padding:15px;border-radius:20px}.finder-step{grid-template-columns:31px 1fr}.finder-step>span{width:30px;height:30px}.finder-recommendation{padding:19px}.finder-recommendation-meta{grid-template-columns:1fr}}
+
+
+/* Fix: delivery package cards must not overflow or clip */
+html, body { overflow-x: hidden; }
+
+.delivery-bundle,
+.delivery-folder,
+.delivery-packages,
+.delivery-package,
+.delivery-package > * {
+  min-width: 0;
+}
+
+@media (min-width: 1121px) {
+  .delivery-bundle {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    align-items: start;
+  }
+
+  .delivery-package {
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: 14px 18px;
+    align-items: start;
+    padding: 18px 20px;
+    overflow: visible;
+  }
+
+  .delivery-package-head {
+    align-self: center;
+  }
+
+  .delivery-package ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-self: center;
+  }
+
+  .delivery-package-result {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 12px 14px;
+  }
+
+  .delivery-package-result span {
+    max-width: none;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 1120px) {
+  .delivery-bundle {
+    grid-template-columns: 1fr;
+  }
+
+  .delivery-package {
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: 14px 18px;
+  }
+
+  .delivery-package-result {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .delivery-package {
+    grid-template-columns: 1fr;
+  }
+
+  .delivery-package ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .delivery-package-result {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .delivery-package ul {
+    grid-template-columns: 1fr;
+  }
+
+  .delivery-folder h3 {
+    font-size: 18px;
+    overflow-wrap: anywhere;
+  }
+}
