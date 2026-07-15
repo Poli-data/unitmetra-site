@@ -105,3 +105,37 @@ section:has(.review-card){display:none}
 .service-card.compact{min-height:455px}.service-card .service-scope{font-size:10px;font-weight:850;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
 @media(max-width:1080px){.cost-factors{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:620px){.cost-factors{grid-template-columns:1fr}.pricing-note{text-align:left}.market-price-strip{display:grid}.market-price-chip{border-radius:12px}}
+
+
+/* Examples of client deliverables under service packages */
+.service-result-example{
+  margin:18px 0 20px;
+  padding:16px;
+  border:1px solid #cfe8e4;
+  border-radius:17px;
+  background:linear-gradient(145deg,#f7fcfb 0%,#eef8f7 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
+}
+.service-result-example__head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.service-result-example__label{
+  display:inline-flex;align-items:center;gap:7px;
+  color:var(--teal-dark);font-size:9px;font-weight:900;
+  letter-spacing:.065em;text-transform:uppercase;
+}
+.service-result-example__label:before{
+  content:"↗";display:grid;place-items:center;width:22px;height:22px;
+  border-radius:8px;background:var(--teal);color:#fff;font-size:11px;
+}
+.service-result-example>strong{display:block;color:var(--navy);font-size:14px;line-height:1.35;margin-bottom:7px}
+.service-result-example>p{margin:0;color:var(--muted);font-size:11px;line-height:1.55}
+.service-result-example__chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.service-result-example__chips span{
+  display:inline-flex;align-items:center;min-height:25px;padding:5px 8px;
+  border:1px solid #d6e9e6;border-radius:999px;background:#fff;
+  color:#496071;font-size:9px;font-weight:850;
+}
+.service-card.featured .service-result-example{border-color:#9edbd3;background:linear-gradient(145deg,#f9fffe,#eaf8f6)}
+@media(max-width:620px){
+  .service-result-example{padding:14px;margin:15px 0 18px}
+  .service-result-example>strong{font-size:13px}
+}
