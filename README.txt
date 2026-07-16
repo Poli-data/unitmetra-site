@@ -1,13 +1,7 @@
-Исправление названий базового пакета Unitmetra.
+Исправление блока «Малый бизнес / Средний бизнес» на первом экране.
 
 В GitHub заменить:
 - index.html
-- services.html
-- assets/app.js
+- assets/styles.css
 
-Изменено:
-- «Стартовый продукт» → «Базовый пакет»
-- «Стартовый пакет» → «Базовый пакет»
-- «фиксированный старт» → «фиксированная стоимость»
-- Entry package / Starter package → Essential package
-- fixed starting price → fixed price
+После Commit changes обновить сайт: ⌘ + Shift + R.
